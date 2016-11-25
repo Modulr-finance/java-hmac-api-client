@@ -15,7 +15,7 @@ group = 'com.modulr.modulo.client'
 /* versions of dependencies */
 ext {
 	/* compile time dependencies*/
-//	SWAGGER_JAVA_CLIENT_VERSION = 3.3.0
+	SWAGGER_JAVA_CLIENT_VERSION = '3.3.0'
 }
 
 uploadArchives {
@@ -40,7 +40,7 @@ repositories {
 }
 
 dependencies {
-	compile files('lib/swagger-java-client-$SWAGGER_JAVA_CLIENT_VERSION.jar')
+	compile files('lib/swagger-java-client-' + SWAGGER_JAVA_CLIENT_VERSION + '.jar')
 	compile 'io.swagger:swagger-annotations:1.5.8'
     compile 'com.squareup.okhttp:okhttp:2.7.5'
 	compile 'com.squareup.okhttp:logging-interceptor:2.7.5'
