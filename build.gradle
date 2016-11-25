@@ -1,11 +1,6 @@
-plugins {
-  id 'net.researchgate.release' version '2.3.4'
-}
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
-apply plugin: "jacoco"
 
 sourceCompatibility = 1.8
 
@@ -18,24 +13,9 @@ ext {
 	SWAGGER_JAVA_CLIENT_VERSION = '3.3.0'
 }
 
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      repository(
-        url: "http://nexus.modulrfinance.io/nexus/content/repositories/releases") {
-          authentication(userName: "$System.env.NEXUS_DEPLOYMENT_USERNAME", password: "$System.env.NEXUS_DEPLOYMENT_PASSWORD")
-      }
-      snapshotRepository(
-        url: "http://nexus.modulrfinance.io/nexus/content/repositories/snapshots") {
-          authentication(userName: "$System.env.NEXUS_DEPLOYMENT_USERNAME", password: "$System.env.NEXUS_DEPLOYMENT_PASSWORD")
-      }
-    }
-  }
-}
-
 repositories {
     maven {
-          url "http://nexus.modulrfinance.io/nexus/content/groups/public/"
+          url "https://repo1.maven.org/maven2/"
     }
 }
 
@@ -56,11 +36,3 @@ task sourcesJar(type: Jar, dependsOn:classes) {
 artifacts {
      archives sourcesJar
 }
-
-release {
-	git {
-		requireBranch = ''
-	}
-}
-
-afterReleaseBuild.dependsOn uploadArchives

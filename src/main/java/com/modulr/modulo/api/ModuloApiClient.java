@@ -179,7 +179,8 @@ public class ModuloApiClient extends ApiClient{
             contentType = "application/json";
         }
         if (isJsonMime(contentType)) {
-        	if(ERROR_PATTERN.matcher(respBody).matches()){
+        	
+        	if(response.code() >= 400 && ERROR_PATTERN.matcher(respBody).matches()){
         		/* error condition*/
         		throw new ModuloErrorException((List<ModuloError>)getJSON().deserialize(respBody, new TypeToken<List<ModuloError>>() {}.getType()));
         	}else {
