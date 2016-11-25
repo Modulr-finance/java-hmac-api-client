@@ -9,7 +9,7 @@ apply plugin: "jacoco"
 
 sourceCompatibility = 1.8
 
-archivesBaseName = 'hmac-java-client'
+archivesBaseName = 'hmac-api-client'
 group = 'com.modulr.modulo.client'
 	
 /* versions of dependencies */
