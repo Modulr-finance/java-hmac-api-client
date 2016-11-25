@@ -1,0 +1,66 @@
+plugins {
+  id 'net.researchgate.release' version '2.3.4'
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: "jacoco"
+
+sourceCompatibility = 1.8
+
+archivesBaseName = 'hmac-java-client'
+group = 'com.modulr.modulo.client'
+	
+/* versions of dependencies */
+ext {
+	/* compile time dependencies*/
+//	SWAGGER_JAVA_CLIENT_VERSION = 3.3.0
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      repository(
+        url: "http://nexus.modulrfinance.io/nexus/content/repositories/releases") {
+          authentication(userName: "$System.env.NEXUS_DEPLOYMENT_USERNAME", password: "$System.env.NEXUS_DEPLOYMENT_PASSWORD")
+      }
+      snapshotRepository(
+        url: "http://nexus.modulrfinance.io/nexus/content/repositories/snapshots") {
+          authentication(userName: "$System.env.NEXUS_DEPLOYMENT_USERNAME", password: "$System.env.NEXUS_DEPLOYMENT_PASSWORD")
+      }
+    }
+  }
+}
+
+repositories {
+    maven {
+          url "http://nexus.modulrfinance.io/nexus/content/groups/public/"
+    }
+}
+
+dependencies {
+	compile files('lib/swagger-java-client-$SWAGGER_JAVA_CLIENT_VERSION.jar')
+	compile 'io.swagger:swagger-annotations:1.5.8'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
+	compile 'com.squareup.okhttp:logging-interceptor:2.7.5'
+    compile 'com.google.code.gson:gson:2.6.2'
+	compile 'joda-time:joda-time:2.9.3'
+}
+
+task sourcesJar(type: Jar, dependsOn:classes) {
+     classifier = 'sources'
+     from sourceSets.main.allSource
+}
+
+artifacts {
+     archives sourcesJar
+}
+
+release {
+	git {
+		requireBranch = ''
+	}
+}
+
+afterReleaseBuild.dependsOn uploadArchives
