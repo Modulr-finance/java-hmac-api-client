@@ -180,7 +180,7 @@ public class ModuloApiClient extends ApiClient{
         }
         if (isJsonMime(contentType)) {
         	
-        	if(response.code() >= 400 && ERROR_PATTERN.matcher(respBody).matches()){
+        	if(ERROR_PATTERN.matcher(respBody).matches()){
         		/* error condition*/
         		throw new ModuloErrorException((List<ModuloError>)getJSON().deserialize(respBody, new TypeToken<List<ModuloError>>() {}.getType()));
         	}else {
@@ -195,6 +195,23 @@ public class ModuloApiClient extends ApiClient{
                     response.code(),
                     response.headers().toMultimap(),
                     respBody);
+        }
+    }
+	
+    public <T> T handleResponse(Response response, Type returnType) throws ApiException {
+    	
+    	if (returnType == null || response.code() == 204) {
+            // returning null if the returnType is not defined,
+            // or the status code is 204 (No Content)
+            return null;
+        } else {
+            T t = deserialize(response, returnType);
+            
+            if ( t == null && !response.isSuccessful()){
+            	throw new ApiException(response.message(), response.code(), response.headers().toMultimap(), null);
+            }
+            
+            return t;
         }
     }
 }
