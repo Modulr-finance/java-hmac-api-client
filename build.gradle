@@ -1,0 +1,38 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.8
+
+archivesBaseName = 'hmac-api-client'
+group = 'com.modulr.modulo.client'
+	
+/* versions of dependencies */
+ext {
+	/* compile time dependencies*/
+	SWAGGER_JAVA_CLIENT_VERSION = '3.3.0'
+}
+
+repositories {
+    maven {
+          url "https://repo1.maven.org/maven2/"
+    }
+}
+
+dependencies {
+	compile files('lib/swagger-java-client-' + SWAGGER_JAVA_CLIENT_VERSION + '.jar')
+	compile 'io.swagger:swagger-annotations:1.5.8'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
+	compile 'com.squareup.okhttp:logging-interceptor:2.7.5'
+    compile 'com.google.code.gson:gson:2.6.2'
+	compile 'joda-time:joda-time:2.9.3'
+}
+
+task sourcesJar(type: Jar, dependsOn:classes) {
+     classifier = 'sources'
+     from sourceSets.main.allSource
+}
+
+artifacts {
+     archives sourcesJar
+}

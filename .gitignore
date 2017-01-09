@@ -1,0 +1,9 @@
+/build/
+/bin/
+/.apt_generated/
+/.gradle/
+/.settings/
+/.classpath
+/.factorypath
+/.project
+/.sonar_lock
