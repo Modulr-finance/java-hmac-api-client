@@ -12,17 +12,7 @@ A java client that handles HMAC auth to Modulr API
    1. Generate a java client by using `Generate Client -> Java` menu
    1. A gradle project of the swagger java client will be downloaded, build this project by using running `gradle clean assemble`
 1. Clone this repository
-1. Modify the [Gradle build file](https://github.com/Modulr-finance/java-hmac-api-client/blob/master/build.gradle) to use the correct version of the API and the path to generated java client from the previous step
-
-    ```groovy
-    /* versions of dependencies */
-    ext {
-	    /* compile time dependencies*/
-	    SWAGGER_JAVA_CLIENT_VERSION = '3.3.0'
-    }
-    ```
-
-1. If needed, also modify the path to generated java client from the previous step
+1. Optionally, modify the [Gradle build file](https://github.com/Modulr-finance/java-hmac-api-client/blob/master/build.gradle) to use the correct path to generated java client from the previous step
     
     ```
     compile files('../swagger-java-client/build/libs/swagger-java-client-' + SWAGGER_JAVA_CLIENT_VERSION + '.jar')
