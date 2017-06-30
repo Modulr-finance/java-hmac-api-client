@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.UUID;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -19,9 +18,17 @@ import io.swagger.client.auth.ApiKeyAuth;
 
 public class ApiKeyHmacAuth extends ApiKeyAuth {
 	public static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+	
+	private SecurityParametersSupplier securityParamsSupplier;
 
 	public ApiKeyHmacAuth(String location, String paramName) {
+		this(location,paramName,new SecurityParametersSupplier());
+	}
+
+	public ApiKeyHmacAuth(String location, String paramName, SecurityParametersSupplier securityParamsSupplier) {
 		super(location,paramName);
+		
+		this.securityParamsSupplier = securityParamsSupplier;
 	}
 
 	@Override
@@ -38,8 +45,8 @@ public class ApiKeyHmacAuth extends ApiKeyAuth {
 			throw new IllegalStateException(getLocation() + " invalid location for Modulr API Auth");
 		} else {
 			try {
-				String nonce = UUID.randomUUID().toString();
-				Date now = new Date();
+				String nonce = securityParamsSupplier.getNonce();
+				Date now = securityParamsSupplier.getDate();
 				DateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
 				sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 				String nowString = sdf.format(now);
@@ -51,6 +58,7 @@ public class ApiKeyHmacAuth extends ApiKeyAuth {
 				headerParams.put(getParamName(), auth);
 				headerParams.put("Date", nowString);
 				headerParams.put("x-mod-nonce", nonce);
+				headerParams.put("x-mod-retry", String.valueOf(securityParamsSupplier.getRetry()));
 			} catch (SignatureException e) {
 				e.printStackTrace();
 				throw new IllegalStateException("Failed to build Auth headers for Modulr API Auth");

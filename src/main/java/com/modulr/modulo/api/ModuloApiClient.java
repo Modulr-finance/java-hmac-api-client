@@ -27,10 +27,20 @@ public class ModuloApiClient extends ApiClient{
 	public static final Pattern ERROR_PATTERN = Pattern.compile("\\[\\s*\\{\\s*\"field\"\\s*:\\s*\"[^\"]*\"[^,]*,\\s*\"code\"\\s*:\\s*\"[^\"]*\".*\\]");
 
 	public ModuloApiClient() {
+		this(null);
+	}
+
+	public ModuloApiClient(SecurityParametersSupplier securityParamsSupplier) {
 		super();
 		authentications = new HashMap<String, Authentication>();
 		authentications.putAll(super.getAuthentications());
-		authentications.put("modulo_security", new ApiKeyHmacAuth("header", "Authorization"));
+		ApiKeyHmacAuth apiKeyHmacAuth = null;
+		if(securityParamsSupplier == null){
+			apiKeyHmacAuth = new ApiKeyHmacAuth("header", "Authorization");
+		}else {
+			apiKeyHmacAuth = new ApiKeyHmacAuth("header", "Authorization", securityParamsSupplier);
+		}
+		authentications.put("modulo_security", apiKeyHmacAuth);
 		
 		authentications = Collections.unmodifiableMap(authentications);
 	}
