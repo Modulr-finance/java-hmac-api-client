@@ -193,8 +193,10 @@ public class ModuloApiClient extends ApiClient{
         	if(ERROR_PATTERN.matcher(respBody).matches()){
         		/* error condition*/
         		throw new ModuloErrorException((List<ModuloError>)getJSON().deserialize(respBody, new TypeToken<List<ModuloError>>() {}.getType()));
-        	}else {
+        	}else if(response.isSuccessful()){
         		return getJSON().deserialize(respBody, returnType);
+        	} else {
+        		return null;
         	}
         } else if (returnType.equals(String.class)) {
             // Expecting string, return the raw response body.
